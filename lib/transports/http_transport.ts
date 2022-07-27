@@ -4,6 +4,7 @@ const ALY = require('aliyun-sdk');
 
 export class HttpTransport extends Transport {
   private flushInterval: number;
+  private maxBufferSize: number;
   private maxBufferLength: number;
   private bufferMsg: string[];
   private bufferSize: number;
@@ -14,7 +15,8 @@ export class HttpTransport extends Transport {
     super();
 
     this.flushInterval = 3000;
-    this.maxBufferLength = 8 * 1024 * 1024;
+    this.maxBufferSize = 5 * 1024 * 1024;
+    this.maxBufferLength = 200;
     this.bufferMsg = [];
     this.bufferSize = 0;
 
@@ -59,7 +61,10 @@ export class HttpTransport extends Transport {
 
     this.bufferSize += Buffer.byteLength(msg, 'utf8');
     this.bufferMsg.push(msg);
-    if (this.bufferSize >= this.maxBufferLength) {
+    if (
+      this.bufferSize >= this.maxBufferSize ||
+      this.bufferMsg.length >= this.maxBufferLength
+    ) {
       this.flush();
     }
   }

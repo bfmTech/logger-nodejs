@@ -7,6 +7,7 @@ import { common } from '../common';
 
 export class FileTransport extends Transport {
   private flushInterval: number;
+  private maxBufferSize: number;
   private maxBufferLength: number;
   private bufferMsg: string[];
   private bufferSize: number;
@@ -20,7 +21,8 @@ export class FileTransport extends Transport {
     this.hostName = os.hostname();
     this.appName = appName;
     this.flushInterval = 3000;
-    this.maxBufferLength = 1 * 1024 * 1024;
+    this.maxBufferSize = 1 * 1024 * 1024;
+    this.maxBufferLength = 100;
     this.bufferMsg = [];
     this.bufferSize = 0;
     this.filePath = '/var/winnerlogs';
@@ -34,7 +36,10 @@ export class FileTransport extends Transport {
 
     this.bufferSize += Buffer.byteLength(msg, 'utf8');
     this.bufferMsg.push(msg);
-    if (this.bufferSize >= this.maxBufferLength) {
+    if (
+      this.bufferSize >= this.maxBufferSize ||
+      this.bufferMsg.length >= this.maxBufferLength
+    ) {
       this.flush();
     }
   }
