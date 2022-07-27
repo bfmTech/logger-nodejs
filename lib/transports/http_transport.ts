@@ -84,7 +84,20 @@ export class HttpTransport extends Transport {
     }
   }
 
-  private putLogs(msg: string[]) {
+  private retryPutLogs(msg: string[], tryNum: number) {
+    if (tryNum >= 3) {
+      msg.forEach((e) => {
+        process.stdout.write(e + '\n');
+      });
+    } else {
+      setTimeout(() => {
+        tryNum++;
+        this.putLogs(msg, tryNum);
+      }, 1000);
+    }
+  }
+
+  private putLogs(msg: string[], tryNum: number = 0) {
     let logs = [];
     for (let i = 0; i < msg.length; i++) {
       logs.push({
@@ -102,6 +115,8 @@ export class HttpTransport extends Transport {
       logs: logs,
     };
 
+    let that = this;
+
     this.sls.putLogs(
       {
         projectName: this.projectName,
@@ -110,7 +125,7 @@ export class HttpTransport extends Transport {
       },
       function (err: any) {
         if (err) {
-          console.log('error:', err);
+          that.retryPutLogs(msg, tryNum);
         }
       }
     );
