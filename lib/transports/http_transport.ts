@@ -20,23 +20,18 @@ export class HttpTransport extends Transport {
     this.bufferMsg = [];
     this.bufferSize = 0;
 
-    const endpoint = process.env.LOGGER_ALIYUN_ENDPOINT;
-    const projectName = process.env.LOGGER_ALIYUN_PROJECTNAME;
-    const logStoreName = process.env.LOGGER_ALIYUN_LOGSTORENAME;
+    let endpoint = process.env.LOGGER_ALIYUN_ENDPOINT;
+    let projectName = process.env.LOGGER_ALIYUN_PROJECTNAME;
+    let logStoreName = process.env.LOGGER_ALIYUN_LOGSTORENAME;
     const accessKeyId = process.env.LOGGER_ALIYUN_ACCESSKEYID;
     const accessKeySecret = process.env.LOGGER_ALIYUN_ACCESSKEYSECRET;
 
-    if (
-      !(
-        endpoint &&
-        projectName &&
-        logStoreName &&
-        accessKeyId &&
-        accessKeySecret
-      )
-    ) {
+    if (!(accessKeyId && accessKeySecret)) {
       throw new Error('LOGGER_ALIYUN 环境变量配置不正确');
     }
+    endpoint = endpoint ?? 'http://cn-hangzhou.log.aliyuncs.com';
+    projectName = projectName ?? 'k8s-log-custom-zwdfroh2';
+    logStoreName = logStoreName ?? 'config-operation-log';
 
     this.projectName = projectName;
     this.logStoreName = logStoreName;
