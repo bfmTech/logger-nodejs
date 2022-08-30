@@ -39,9 +39,9 @@ export class Logger {
 
   public error(message: Error) {
     let msg: string[] = [];
-    if (message.valueOf == Error) {
+    if (message && message.message) {
       msg.push(message.message);
-      if (message.stack) msg.push(message.stack);
+      // if (message.stack) msg.push(message.stack);
     } else {
       msg.push(JSON.stringify(message));
     }
@@ -62,6 +62,7 @@ export class Logger {
     resBody: string,
     clientIp: string,
     userAgent: string,
+    reqId: string,
     headers: string
   ) {
     let msg: any = [
@@ -77,21 +78,26 @@ export class Logger {
       resBody,
       clientIp,
       userAgent,
+      reqId,
       headers,
     ];
     this._log(Level.access, msg);
   }
 
-  private getStack() {
+  private getStack(level: Level, skip: number) {
     const obj = Object.create(null); // 初始化一个空对象
     Error.captureStackTrace(obj); // 捕捉堆栈并塞入obj.stack属性中
-    return obj.stack.substring(
-      common.indexOfNthStr(obj.stack, '(', 4) + 1,
-      common.indexOfNthStr(obj.stack, ')', 4)
-    );
+    if (level == Level.error) {
+      return obj.stack;
+    } else {
+      return obj.stack.substring(
+        common.indexOfNthStr(obj.stack, '(', skip) + 1,
+        common.indexOfNthStr(obj.stack, ')', skip)
+      );
+    }
   }
   private _log(level: Level, message: string[]) {
-    let stack = this.getStack();
+    let stack = this.getStack(level, 4);
     if (!stack) stack = ' ';
 
     var logInfo: LogInfo = {
