@@ -20,3 +20,21 @@ logger.access(
   '1a221f4943ac983760c5e240f4fa3a5a',
   'token:32323212995fd32'
 );
+
+setInterval(() => {
+  logger.info('这是info消息1', '消息2', '消息3');
+}, 5000);
+
+// 退出时关闭logger
+['SIGINT', 'SIGTERM'].forEach((signal) =>
+  process.on(signal, () => {
+    console.info(signal + ' signal received.');
+
+    logger.close();
+
+    setTimeout(() => {
+      console.log('application exit');
+      process.exit();
+    }, 3000);
+  })
+);

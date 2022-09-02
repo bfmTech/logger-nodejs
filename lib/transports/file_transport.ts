@@ -25,7 +25,7 @@ export class FileTransport extends Transport {
     this.maxBufferLength = 100;
     this.bufferMsg = [];
     this.bufferSize = 0;
-    this.filePath = '/var/winnerlogs';
+    this.filePath = process.env.NODE_APP_DATA ?? '/var/winnerlogs';
 
     this.createWriteSteam();
     this.createInterval();
