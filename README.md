@@ -92,6 +92,7 @@ logger.close()；
 
 
 **上传方式为Http时环境变量说明**
+
 |  变量名   | 说明  |
 |  ----  | ----  |
 | LOGGER_ALIYUN_ENDPOINT  | 阿里云sls公网服务入口 |
