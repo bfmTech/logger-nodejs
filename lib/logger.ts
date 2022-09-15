@@ -25,6 +25,13 @@ export class Logger {
     }
   }
 
+  public sql(...message: string[]) {
+    if (message.length >= 2) {
+      message = [message[0], message[1]];
+    }
+    this._log(Level.info, message);
+  }
+
   public debug(...message: string[]) {
     this._log(Level.debug, message);
   }
