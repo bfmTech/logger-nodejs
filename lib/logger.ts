@@ -5,7 +5,7 @@ import { ConsoleTransport, FileTransport, HttpTransport } from './transports';
 export class Logger {
   private appName: string;
   private transport: ConsoleTransport | FileTransport | HttpTransport;
-  constructor(appName: string, logType: LogType) {
+  constructor(appName: string, logType: LogType, storingDays?: number) {
     this.appName = appName;
 
     switch (logType) {
@@ -13,7 +13,7 @@ export class Logger {
         this.transport = new ConsoleTransport();
         break;
       case LogType.file:
-        this.transport = new FileTransport(this.appName);
+        this.transport = new FileTransport(this.appName, storingDays);
         break;
       case LogType.http:
         this.transport = new HttpTransport();

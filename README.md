@@ -23,7 +23,7 @@ const logger = new Logger(appName, LogType.console);
 
 // LogType.console // 控制台 (k8s容器平台使用(推荐))
 // LogType.file    // 文件 (k8s容器平台使用)
-// LogType.http    // http(需配置阿里云相关环境变量(联系架构部))
+// LogType.http    // http(需配置阿里云相关环境变量(联系管理员))
 
 module.exports = logger;
 ```
@@ -101,9 +101,14 @@ logger.close()；
 | LOGGER_ALIYUN_ACCESSKEYID  | AccessKey ID，建议使用RAM用户的AccessKey信息。 |
 | LOGGER_ALIYUN_ACCESSKEYSECRET  | AccessKey Secret，建议使用RAM用户的AccessKey信息。 |
 
+**非k8s容器平台`File`类型的日志使用说明**
+* 日志文件存储在`NODE_APP_DATA`环境变量目录下
+* 存储目录为：指定目录/应用名称/主机名/logger-YYYY-MM-DD.log
+* 文件默认存储最近30天，可通过new Logger()第三个参数设置
+
+
 ## 注意
 1. `appName` 需唯一，且有意义，用于检索和报错时通知负责人。
 2. `LogType`为`file`或`http`时，程序退出时必须调用Close()，否则可能导致最后部分日志丢失。
 3. `LogType`为`http`时，需要配置阿里云相关环境变量，请联系管理员。
 4. 日志默认存储时长为**360**天，如有特殊需求请联系管理员。
-5. `File`类型的日志，存储在`NODE_APP_DATA`环境变量目录下
