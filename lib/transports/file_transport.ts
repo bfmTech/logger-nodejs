@@ -27,7 +27,7 @@ export class FileTransport extends Transport {
 
     this.hostName = os.hostname();
     this.appName = appName;
-    this.flushInterval = 3000;
+    this.flushInterval = 1000;
     this.maxBufferSize = 1 * 1024 * 1024;
     this.maxBufferLength = 100;
     this.bufferMsg = [];

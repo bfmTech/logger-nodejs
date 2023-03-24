@@ -14,7 +14,7 @@ export class HttpTransport extends Transport {
   constructor() {
     super();
 
-    this.flushInterval = 3000;
+    this.flushInterval = 1000;
     this.maxBufferSize = 5 * 1024 * 1024;
     this.maxBufferLength = 200;
     this.bufferMsg = [];
