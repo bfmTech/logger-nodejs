@@ -71,8 +71,8 @@ logger.close()；
 |  ----  | ----  | ----  |
 | method  | string | 请求方法 |
 | status  | number | HTTP请求状态 |
-| beginTime  | number | 请求开始时间(秒时间戳) |
-| endTime  | number | 请求结束时间(秒时间戳) |
+| beginTime  | number | 请求开始时间(毫秒时间戳) |
+| endTime  | number | 请求结束时间(毫秒时间戳) |
 | referer  | string | 请求来源 |
 | httpHost  | string | 请求地址 |
 | interface  | string | 请求接口 |
