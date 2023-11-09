@@ -46,14 +46,15 @@ export class Logger {
 
   public error(message: Error) {
     let msg: string[] = [];
+    let stack = '';
     if (message && message.message) {
       msg.push(message.message);
-      // if (message.stack) msg.push(message.stack);
+      if (message.stack) stack = message.stack;
     } else {
       msg.push(JSON.stringify(message));
     }
 
-    this._log(Level.error, msg);
+    this._log(Level.error, msg, stack);
   }
 
   public access(
@@ -103,8 +104,8 @@ export class Logger {
       );
     }
   }
-  private _log(level: Level, message: string[]) {
-    let stack = this.getStack(level, 4);
+  private _log(level: Level, message: string[], stack: string = '') {
+    if (!stack) stack = this.getStack(level, 4);
     if (!stack) stack = ' ';
 
     var logInfo: LogInfo = {
