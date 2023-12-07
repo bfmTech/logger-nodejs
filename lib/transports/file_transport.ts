@@ -5,7 +5,7 @@ import {
   existsSync,
   WriteStream,
   mkdirSync,
-  rmSync,
+  unlink,
 } from 'fs';
 import { dirname } from 'path';
 import * as os from 'os';
@@ -104,7 +104,7 @@ export class FileTransport extends Transport {
         );
 
         const clearPath = `${this.filePath}/${this.appName}/${this.hostName}/logger-${clearDay}.log`;
-        rmSync(clearPath, { force: true });
+        unlink(clearPath, (err) => {});
       }
     }
   }
