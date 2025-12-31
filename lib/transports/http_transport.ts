@@ -15,7 +15,7 @@ export class HttpTransport extends Transport {
     super();
 
     this.flushInterval = 1000;
-    this.maxBufferSize = 3 * 1024 * 1024;
+    this.maxBufferSize = 2 * 1024 * 1024;
     this.maxBufferLength = 200;
     this.bufferMsg = [];
     this.bufferSize = 0;
@@ -118,6 +118,9 @@ export class HttpTransport extends Transport {
       function (err: any) {
         if (err) {
           that.retryPutLogs(msg, tryNum);
+          if (tryNum >= 3) {
+            console.log('日志上传失败，已打印至控制台。Error:', err.message);
+          }
         }
       }
     );
