@@ -65,6 +65,27 @@ logger.close()；
 -level.access   //access日志，根据方法提示的参数传递
 ```
 
+**日志级别过滤（可选）**
+
+低于阈值的日志会在入口处直接返回，不抓取堆栈、不做时间格式化，可显著降低高频日志的CPU开销。
+`error` 和 `access` 永不被过滤。
+
+```javascript
+// 方式一：构造函数第四个参数（优先级更高）
+const logger = new Logger(appName, LogType.console, undefined, Level.warn);
+
+// 方式二：环境变量，不改代码即可调整
+// LOGGER_LEVEL=warn
+const logger = new Logger(appName, LogType.console);
+
+// 业务侧可提前判断，跳过昂贵的日志参数拼装
+if (logger.isLevelEnabled(Level.debug)) {
+  logger.debug(JSON.stringify(bigObject));
+}
+```
+
+阈值可选 `debug` / `info` / `warn` / `error`，未配置或配置了非法值时输出全部日志（与历史行为一致）。
+
 **access日志 字段说明**
 
 |  字段   | 类型  | 说明  |
@@ -109,6 +130,6 @@ logger.close()；
 
 ## 注意
 1. `appName` 需唯一，且有意义，用于检索和报错时通知负责人。
-2. `LogType`为`file`或`http`时，程序退出时必须调用Close()，否则可能导致最后部分日志丢失。
+2. 三种`LogType`均为缓冲批量输出（满100条 / 满缓冲 / 每1秒，任一条件触发），因此日志最多有**1秒延迟**。程序退出时会自动同步补写残留日志，但仍建议在退出流程中显式调用`close()`立即落盘；`kill -9`等强制终止无法兜底。
 3. `LogType`为`http`时，需要配置阿里云相关环境变量，请联系管理员。
 4. 日志默认存储时长为**360**天，如有特殊需求请联系管理员。

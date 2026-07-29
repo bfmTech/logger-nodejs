@@ -1,9 +1,11 @@
 {
   "name": "logger-nodejs",
-  "version": "1.1.8",
+  "version": "1.2.0",
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "node ./node_modules/typescript/bin/tsc --build",
+    "typecheck": "node ./node_modules/typescript/bin/tsc --noEmit",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -20,6 +22,7 @@
     "aliyun-sdk": "^1.12.5"
   },
   "devDependencies": {
-    "@types/node": "^18.6.1"
+    "@types/node": "^18.6.1",
+    "typescript": "4.7.4"
   }
 }
